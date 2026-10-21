@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fara</title>
+<meta name="description" content="Fara is developing a passive, power-free implant for drug-resistant focal epilepsy, designed to stop seizures from spreading without the memory cost of lobectomy.">
+<link rel="canonical" href="https://faraneuro.com/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#0E2530">
+<meta property="og:title" content="Fara">
+<meta property="og:description" content="Stop a seizure, save a memory. A passive implant for drug-resistant focal epilepsy.">
+<meta property="og:url" content="https://faraneuro.com/">
+<meta property="og:image" content="https://faraneuro.com/icon-512.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout: navy "signal" bands (hero, technology, contact) alternate with cream "tissue" bands; text left-aligned on a 12-col feel, max 1180px. */
+:root{
+  --navy:#0E2530;      /* logo disc — primary ground */
+  --navy-2:#143340;    /* raised navy surface */
+  --cream:#F4F1EA;     /* logo wordmark — light ground + text on navy */
+  --ink:#0E2530;       /* text on cream */
+  --coral:#F08A6C;     /* the seizure: problem, unblocked activity */
+  --teal:#4CC3B1;      /* Fara: the barrier, the quiet line */
+  --muted-dark:#9DB1B8;/* secondary text on navy */
+  --muted-light:#4F646C;/* secondary text on cream */
+  --rule-dark:rgba(244,241,234,.14);
+  --rule-light:rgba(14,37,48,.14);
+  --display:"Lexend","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --max:1180px;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px;background:var(--navy)}
+body{margin:0;background:var(--navy);color:var(--cream);font:400 1.0625rem/1.6 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,svg,canvas{max-width:100%}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:4px}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance;letter-spacing:-.02em}
+p{margin:0}
+.wrap{max-width:var(--max);margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+.band{padding-block:clamp(72px,10vw,128px)}
+.band--cream{background:var(--cream);color:var(--ink)}
+.band--navy{background:var(--navy);color:var(--cream)}
+.band--deep{background:var(--navy-2);color:var(--cream)}
+.lede{font-size:clamp(1.125rem,1.6vw,1.3rem);line-height:1.55;max-width:34em}
+.muted{color:var(--muted-dark)}
+.band--cream .muted{color:var(--muted-light)}
+.h2{font-size:clamp(2rem,4.2vw,3.25rem);line-height:1.08}
+.h3{font-size:1.25rem;line-height:1.3;font-weight:500;letter-spacing:-.01em}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:.5em;font:500 1rem/1 var(--display);padding:.95em 1.4em;border-radius:999px;text-decoration:none;border:1.5px solid transparent;transition:background-color .2s,color .2s,border-color .2s}
+.btn--teal{background:var(--teal);color:var(--navy)}
+.btn--teal:hover{background:var(--cream)}
+.btn--ghost{border-color:var(--rule-dark);color:var(--cream)}
+.btn--ghost:hover{border-color:var(--teal);color:var(--teal)}
+
+/* Header */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--navy)}
+.site-head{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(14,37,48,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--rule-dark)}
+.site-head .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;height:72px}
+.logo{display:block;line-height:0}
+.logo svg{height:40px;width:auto}
+.nav{display:flex;align-items:center;gap:clamp(16px,2.6vw,36px)}
+.nav a{text-decoration:none;font:400 .95rem/1 var(--display);color:var(--muted-dark)}
+.nav a:hover{color:var(--cream)}
+.nav .btn{padding:.75em 1.15em;font-size:.9rem;color:var(--navy)}
+.nav .btn:hover{color:var(--navy)}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;padding-block:clamp(48px,7vw,96px) clamp(180px,16vw,210px)}
+#trace{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:center;gap:32px}
+.hero-copy{display:flex;flex-direction:column;gap:28px;padding-block:24px;position:relative;z-index:2}
+.hero h1{font-size:clamp(2.75rem,6.4vw,5.5rem);line-height:.98;font-weight:300;letter-spacing:-.035em}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px}
+.status{font-size:.9rem;color:var(--muted-dark);display:flex;align-items:center;gap:10px}
+.status::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px rgba(76,195,177,.18);flex:none}
+.implant{position:relative;aspect-ratio:4/5;width:100%;max-width:360px;justify-self:center;align-self:end;z-index:1}
+#implant-canvas{width:100%;height:100%;display:block;opacity:0;transition:opacity 1.2s ease}
+#implant-canvas.ready{opacity:1}
+.trace-legend{position:absolute;left:0;right:0;bottom:-6px;display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted-dark);pointer-events:none}
+.trace-legend span:first-child{color:var(--coral)}
+.trace-legend span:last-child{color:var(--teal)}
+
+/* Problem */
+.split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(32px,6vw,96px);align-items:start}
+.prose{display:flex;flex-direction:column;gap:1.1em;max-width:36em}
+.facts{list-style:none;margin:40px 0 0;padding:0;display:grid;gap:0;border-top:1px solid var(--rule-light)}
+.facts li{display:grid;grid-template-columns:8.5rem minmax(0,1fr);gap:20px;padding-block:20px;border-bottom:1px solid var(--rule-light);align-items:baseline}
+.facts strong{font:300 2rem/1 var(--display);letter-spacing:-.03em;color:var(--ink)}
+.facts sup a{color:var(--muted-light);text-decoration:none;font-size:.75em}
+.sources{margin-top:20px;font-size:.8rem;color:var(--muted-light)}
+.sources a{color:inherit}
+
+/* Technology */
+.tech-head{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(32px,6vw,96px);align-items:end;margin-bottom:clamp(48px,6vw,80px)}
+.props{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,4vw,56px)}
+.prop{display:flex;flex-direction:column;gap:14px;padding-top:24px;border-top:1px solid var(--rule-dark)}
+.prop svg{width:44px;height:44px}
+.prop p{color:var(--muted-dark)}
+
+/* Progress */
+.timeline{list-style:none;margin:clamp(40px,5vw,64px) 0 0;padding:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,2.3fr) minmax(0,1fr)}
+.step{position:relative;padding:0 20px 0 0;display:flex;flex-direction:column;gap:10px}
+.step .node{display:flex;align-items:center;height:28px;margin-bottom:8px}
+.step .node::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid var(--ink);background:var(--cream);flex:none;position:relative;z-index:1}
+.step .node::after{content:"";height:2px;flex:1;background:var(--rule-light);margin-left:-2px}
+.step:last-child .node::after{background:linear-gradient(90deg,var(--rule-light),transparent)}
+.step--done .node::before{background:var(--teal);border-color:var(--teal)}
+.step--done .node::after{background:var(--teal)}
+.step--now .node::before{background:var(--cream);border-color:var(--teal);box-shadow:0 0 0 5px rgba(76,195,177,.25)}
+.step-n{font:400 .85rem/1 var(--display);color:var(--muted-light);font-variant-numeric:tabular-nums}
+.step h3{font-size:1.1rem}
+.step p{font-size:.95rem;color:var(--muted-light)}
+.tag{align-self:flex-start;font:500 .75rem/1 var(--display);padding:.45em .7em;border-radius:999px;border:1px solid var(--rule-light);color:var(--muted-light)}
+.step--done .tag{background:rgba(76,195,177,.16);border-color:transparent;color:#1E6E63}
+.step--now .tag{background:var(--ink);border-color:var(--ink);color:var(--cream)}
+.substeps{list-style:none;margin:6px 0 4px;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 24px}
+.substeps li{display:grid;grid-template-columns:12px minmax(0,1fr);gap:4px 12px;align-items:start}
+.substeps li::before{content:"";width:12px;height:12px;border-radius:50%;border:2px solid var(--rule-light);margin-top:5px;grid-row:span 2}
+.substeps li.done::before{background:var(--teal);border-color:var(--teal)}
+.substeps li.now::before{border-color:var(--teal);box-shadow:0 0 0 4px rgba(76,195,177,.25)}
+.substeps b{font:500 1rem/1.35 var(--display);color:var(--ink)}
+.substeps span{font-size:.9rem;color:var(--muted-light)}
+.traction{margin-top:clamp(64px,8vw,112px);padding-top:clamp(40px,5vw,64px);border-top:1px solid var(--rule-light);display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(32px,6vw,96px);align-items:start}
+.wins{display:flex;flex-direction:column;gap:28px}
+.grant{display:flex;flex-direction:column;gap:6px}
+.grant strong{font:300 clamp(3.5rem,8vw,6rem)/.95 var(--display);letter-spacing:-.045em;color:var(--ink);font-variant-numeric:tabular-nums}
+.grant span{font:400 1.15rem/1.35 var(--display);color:var(--ink)}
+.award{display:flex;gap:16px;align-items:center;padding-top:24px;border-top:1px solid var(--rule-light);color:var(--muted-light)}
+.award strong{color:var(--ink);font-weight:700}
+
+/* Team */
+.team{list-style:none;margin:clamp(40px,5vw,64px) 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(40px,5vw,64px) clamp(32px,6vw,96px)}
+.person{display:grid;grid-template-columns:120px minmax(0,1fr);gap:28px;align-items:start}
+.person img{width:120px;height:120px;border-radius:50%;object-fit:cover;background:var(--navy);display:block}
+.person .role{font:400 .95rem/1.35 var(--display);color:#1E6E63;margin-top:6px}
+.person .bio{margin-top:12px;color:var(--muted-light);max-width:32em}
+.person .more{margin-top:10px;font-size:.95rem;color:var(--muted-light)}
+.person .more a{color:var(--ink)}
+.textlink{color:var(--ink);text-decoration:underline;text-decoration-color:var(--teal);text-decoration-thickness:2px;text-underline-offset:4px}
+.textlink:hover{text-decoration-color:var(--coral)}
+
+/* Tell us your story — the page's loud moment: a full teal band */
+.story{background:var(--teal);color:var(--navy);padding-block:clamp(88px,13vw,176px)}
+.story h2{font-size:clamp(3.5rem,11vw,10rem);line-height:.9;font-weight:300;letter-spacing:-.05em;max-width:9em}
+.story .lede{margin-top:clamp(24px,3vw,40px);color:var(--navy);font-size:clamp(1.15rem,1.9vw,1.5rem);max-width:30em}
+.email-row{display:flex;flex-wrap:wrap;align-items:center;gap:16px 20px;margin-top:clamp(40px,5vw,64px)}
+.email{font:400 clamp(1.6rem,5.2vw,4rem)/1.1 var(--display);letter-spacing:-.03em;color:var(--navy);text-decoration:none;border-bottom:3px solid var(--navy);padding-bottom:6px;overflow-wrap:anywhere}
+.email:hover{border-color:var(--cream)}
+.story :focus-visible{outline-color:var(--navy)}
+.copy{font:500 .95rem/1 var(--display);background:var(--navy);border:0;color:var(--cream);border-radius:999px;padding:.85em 1.3em;cursor:pointer}
+.copy:hover{background:var(--navy-2)}
+.audiences{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,4vw,56px);margin-top:clamp(56px,7vw,96px)}
+.aud{padding-top:20px;border-top:1.5px solid rgba(14,37,48,.3);display:flex;flex-direction:column;gap:8px}
+.aud p{color:rgba(14,37,48,.82)}
+
+/* Footer */
+.foot{background:var(--navy);border-top:1px solid var(--rule-dark);padding-block:40px calc(40px + env(safe-area-inset-bottom,0px));color:var(--muted-dark);font-size:.875rem}
+.foot .wrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px 48px;align-items:start}
+.foot .logo svg{height:32px}
+.disclaimer{max-width:52em}
+
+@media (max-width:900px){
+  .hero .wrap{grid-template-columns:1fr}
+  .hero{padding-bottom:24px}
+  .implant{max-width:260px;order:2;margin:0 auto 150px}
+  .split,.tech-head,.traction{grid-template-columns:1fr}
+  .team,.audiences{grid-template-columns:1fr}
+  .props{grid-template-columns:1fr}
+  .timeline{grid-template-columns:1fr;gap:0}
+  .step{padding:0 0 28px 44px}
+  .step .node{position:absolute;left:0;top:0;height:100%;flex-direction:column;align-items:flex-start;width:16px;margin:0}
+  .step .node::before{margin-top:4px}
+  .step .node::after{width:2px;height:auto;flex:1;margin:-2px 0 0 7px}
+  .step:last-child .node::after{background:linear-gradient(180deg,var(--rule-light),transparent)}
+  .step--done .node::after{background:var(--teal)}
+  .substeps{grid-template-columns:1fr}
+  .nav a:not(.btn){display:none}
+  .foot .wrap{grid-template-columns:1fr}
+}
+@media (max-width:480px){
+  .facts li{grid-template-columns:1fr;gap:6px}
+  .person{grid-template-columns:88px minmax(0,1fr);gap:20px}
+  .person img{width:88px;height:88px}
+  .logo svg{height:34px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  #implant-canvas{transition:none}
+}
+</style>
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Fara home">
+      <svg viewBox="0 0 396 176" role="img" aria-hidden="true">
+        <circle cx="88" cy="88" r="85" fill="#173A48"/>
+        <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="11">
+          <polyline stroke="#F08A6C" points="23,91 37,91 52,45 67,134 78,90"/>
+          <path stroke="#4CC3B1" d="M92 47V133M108 90H151"/>
+        </g>
+        <g fill="none" stroke="#F4F1EA" stroke-linecap="round" stroke-linejoin="round" stroke-width="10.5">
+          <path d="M226 106V50A14 14 0 0 1 240 36H244M214 69H241"/>
+          <circle cx="270" cy="87" r="19.5"/><path d="M289.5 69V106"/>
+          <path d="M317 106V88A18.5 18.5 0 0 1 335.5 69.5"/>
+          <circle cx="367" cy="87" r="19.5"/><path d="M386.5 69V106"/>
+        </g>
+      </svg>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#technology">Technology</a>
+      <a href="#progress">Progress</a>
+      <a href="#team">Team</a>
+      <a class="btn btn--teal" href="#contact">Contact us</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero band--navy" aria-labelledby="hero-title">
+    <canvas id="trace" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <div class="hero-copy">
+        <h1 id="hero-title">Stop a seizure, save a memory.</h1>
+        <p class="lede">Fara is a passive implant for drug-resistant focal epilepsy. Placed during hippocampal transection, its thin conductive film is designed to block the electrical coupling that lets a seizure spread, with no battery, no leads and no programming.</p>
+        <div class="hero-actions">
+          <a class="btn btn--teal" href="#technology">See how it works</a>
+          <a class="btn btn--ghost" href="#contact">Partner with us</a>
+        </div>
+        <p class="status">In preclinical development. Patent pending.</p>
+      </div>
+      <div class="implant">
+        <canvas id="implant-canvas" aria-label="The Fara implant, a thin perforated disc, rotating slowly" role="img"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--cream" aria-labelledby="problem-title">
+    <div class="wrap split">
+      <h2 id="problem-title" class="h2">Surgery can end the seizures. Too often it costs memory.</h2>
+      <div>
+        <div class="prose">
+          <p class="lede">For people whose seizures start in one part of the temporal lobe, removing that tissue is often the most effective option. But the hippocampus helps form new memories, and taking it out can leave lasting deficits.</p>
+          <p>Hippocampal transection takes a different approach. Instead of removing tissue, the surgeon makes precise cuts that interrupt the pathways seizures travel along. Fara is built to make those cuts work harder: a film placed in the transection that keeps electrical activity from coupling across the gap.</p>
+        </div>
+        <ul class="facts">
+          <li><strong>50M</strong><span>people worldwide live with epilepsy.<sup><a href="#src1" aria-label="Source 1">1</a></sup></span></li>
+          <li><strong>1 in 3</strong><span>keep having seizures despite medication.<sup><a href="#src2" aria-label="Source 2">2</a></sup></span></li>
+          <li><strong>0</strong><span>batteries, leads or stimulation settings in a Fara implant.</span></li>
+        </ul>
+        <p class="sources"><span id="src1">1. World Health Organization, Epilepsy fact sheet.</span> <span id="src2">2. Kwan &amp; Brodie, N Engl J Med 2000.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="technology" class="band band--navy" aria-labelledby="tech-title">
+    <div class="wrap">
+      <div class="tech-head">
+        <h2 id="tech-title" class="h2">A conductor in the cut</h2>
+        <p class="lede muted">Seizures spread partly through ephaptic coupling, where the electric field of one group of firing neurons pushes its neighbours to fire too. A perforated conductive film placed across the transection shunts that field, so activity on one side has far less reach on the other.</p>
+      </div>
+      <div class="props">
+        <div class="prop">
+          <svg viewBox="0 0 44 44" fill="none" stroke-linecap="round" stroke-width="3" aria-hidden="true"><path d="M4 22h8l5-12 6 24 4-12" stroke="#F08A6C"/><path d="M31 8v28M36 22h4" stroke="#4CC3B1"/></svg>
+          <h3 class="h3">No power, nothing to tune</h3>
+          <p>The film works passively. There is no battery to replace, no lead to fracture and no stimulation schedule to adjust after surgery.</p>
+        </div>
+        <div class="prop">
+          <svg viewBox="0 0 44 44" fill="none" stroke="#4CC3B1" stroke-width="3" aria-hidden="true"><circle cx="22" cy="22" r="16"/><circle cx="16" cy="18" r="2.5" fill="#4CC3B1" stroke="none"/><circle cx="25" cy="15" r="2.5" fill="#4CC3B1" stroke="none"/><circle cx="28" cy="25" r="2.5" fill="#4CC3B1" stroke="none"/><circle cx="19" cy="28" r="2.5" fill="#4CC3B1" stroke="none"/></svg>
+          <h3 class="h3">Titanium, MRI-compatible</h3>
+          <p>The commercial implant is designed in titanium for long-term biocompatibility, so patients can keep getting the imaging their care depends on.</p>
+        </div>
+        <div class="prop">
+          <svg viewBox="0 0 44 44" fill="none" stroke-linecap="round" stroke-width="3" aria-hidden="true"><path d="M8 34 34 8" stroke="#F4F1EA"/><path d="M26 34h12M8 8v10" stroke="#4CC3B1"/></svg>
+          <h3 class="h3">Fits the existing procedure</h3>
+          <p>Fara is placed through the same approach as hippocampal transection. In cadaver studies, neurosurgeons gave it top marks for ease of adoption.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="progress" class="band band--cream" aria-labelledby="progress-title">
+    <div class="wrap">
+      <h2 id="progress-title" class="h2">Where we are</h2>
+      <ol class="timeline">
+        <li class="step step--done"><span class="node"></span><span class="step-n">1</span><h3 class="h3">Concept and patent</h3><p>Perforated conductive film invented at Case Western Reserve University.</p><span class="tag">Patent pending</span></li>
+        <li class="step step--done"><span class="node"></span><span class="step-n">2</span><h3 class="h3">Surgical feasibility</h3><p>Cadaver studies with neurosurgeons confirmed the implant fits the procedure.</p><span class="tag">Complete</span></li>
+        <li class="step step--now"><span class="node"></span><span class="step-n">3</span><h3 class="h3">Preclinical efficacy</h3><p>Measuring how much the film attenuates seizure propagation, from tissue to living brain to people.</p>
+          <ol class="substeps">
+            <li class="done"><b>Mouse brain slices</b><span>In vitro</span></li>
+            <li class="done"><b>Rats, acute</b><span>In vivo</span></li>
+            <li class="now"><b>Rats, chronic</b><span>In vivo, long-term implantation</span></li>
+            <li><b>Patients</b><span>First human observations, ahead of formal trials</span></li>
+          </ol>
+          <span class="tag">In progress</span></li>
+        <li class="step"><span class="node"></span><span class="step-n">4</span><h3 class="h3">Clinical trials</h3><p>Human studies to support a regulatory submission.</p><span class="tag">Next</span></li>
+      </ol>
+
+      <div class="traction">
+        <h2 class="h2">Traction</h2>
+        <div class="wins">
+          <p class="grant"><strong>$390K</strong><span>NIH R01 research grant</span></p>
+          <p class="award"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#F08A6C" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="14" cy="11" r="7"/><path d="M10 17l-2 9 6-3 6 3-2-9"/></svg><span><strong>First place,</strong> Pitching for Societal Change, CWRU Homecoming 2026</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="team" class="band band--cream" style="padding-top:0" aria-labelledby="team-title">
+    <div class="wrap">
+      <h2 id="team-title" class="h2">Team</h2>
+      <ul class="team">
+        <li class="person">
+          <img src="team/cedric-levi.jpg" alt="Cedric Levi" width="120" height="120" loading="lazy">
+          <div>
+            <h3 class="h3">Cedric Levi</h3>
+            <p class="role">Co-Founder</p>
+            <p class="bio">Primary inventor of Fara. Biomedical Engineering PhD Candidate at Case Western Reserve University.</p>
+            <p class="more">More info: <a class="textlink" href="https://cedriclevi.com" target="_blank" rel="noopener">CedricLevi.com</a>, <a class="textlink" href="https://www.linkedin.com/in/cedric-levi-bme/" target="_blank" rel="noopener">LinkedIn</a></p>
+          </div>
+        </li>
+        <li class="person">
+          <img src="team/dominique-durand.jpg" alt="Dr. Dominique Durand" width="120" height="120" loading="lazy">
+          <div>
+            <h3 class="h3">Dr. Dominique Durand, PhD</h3>
+            <p class="role">Co-Founder and Principal Investigator</p>
+            <p class="bio">Key opinion leader in epilepsy with more than 40 years of research experience. Delivered multiple devices to FDA-approved human trials. 12+ patents and 150+ peer-reviewed papers.</p>
+            <p class="more">More info: <a class="textlink" href="https://case.edu/nec/people/dominique-m-durand" target="_blank" rel="noopener">Faculty Profile</a>, <a class="textlink" href="https://www.linkedin.com/in/dominique-m-durand-2b2683a/" target="_blank" rel="noopener">LinkedIn</a></p>
+          </div>
+        </li>
+        <li class="person">
+          <img src="team/michael-staudt.jpg" alt="Dr. Michael Staudt" width="120" height="120" loading="lazy">
+          <div>
+            <h3 class="h3">Dr. Michael Staudt</h3>
+            <p class="role">Clinical Advisor, Neurosurgeon</p>
+            <p class="bio">Epilepsy neurosurgery specialist at University Hospitals.</p>
+            <p class="more">More info: <a class="textlink" href="https://www.uhhospitals.org/doctors/staudt-michael-1184173858" target="_blank" rel="noopener">Hospital Profile</a>, <a class="textlink" href="https://www.linkedin.com/in/michael-staudt-80522677/" target="_blank" rel="noopener">LinkedIn</a></p>
+          </div>
+        </li>
+        <li class="person">
+          <img src="team/jonathan-sakai.jpg" alt="Jonathan Sakai" width="120" height="120" loading="lazy">
+          <div>
+            <h3 class="h3">Jonathan Sakai</h3>
+            <p class="role">Business Advisor</p>
+            <p class="bio">Director of Medical Device Commercialization at Cleveland Clinic Foundation and CIONIC. Serial mentor in translation, regulation and exits.</p>
+            <p class="more">More info: <a class="textlink" href="https://www.linkedin.com/in/jonsakai/" target="_blank" rel="noopener">LinkedIn</a></p>
+          </div>
+        </li>
+
+    </div>
+  </section>
+
+  <section id="contact" class="story" aria-labelledby="contact-title">
+    <div class="wrap">
+      <h2 id="contact-title">Tell us your story.</h2>
+      <p class="lede">Living with epilepsy, caring for someone who does, operating on it or investing in what comes next. What you share with us shapes what we build.</p>
+      <div class="email-row">
+        <a class="email" id="email" href="mailto:connect@faraneuro.com">connect@faraneuro.com</a>
+        <button class="copy" id="copy" type="button">Copy email</button>
+      </div>
+      <div class="audiences">
+        <div class="aud"><h3 class="h3">Patients and families</h3><p>Fara isn't available for treatment, but we are available to talk. We want to hear your story so that we can build something for you, by you. Thank you for driving us.</p></div>
+        <div class="aud"><h3 class="h3">Clinicians and researchers</h3><p>Fara is looking for help from surgical and epilepsy-center partners. Be a part of the journey.</p></div>
+        <div class="aud"><h3 class="h3">Investors</h3><p>We're raising funds to push Fara out of the lab and into hospitals. Let's make the change we all want to see in the world.</p></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Fara home">
+      <svg viewBox="0 0 396 176" aria-hidden="true">
+        <circle cx="88" cy="88" r="85" fill="#173A48"/>
+        <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="11"><polyline stroke="#F08A6C" points="23,91 37,91 52,45 67,134 78,90"/><path stroke="#4CC3B1" d="M92 47V133M108 90H151"/></g>
+        <g fill="none" stroke="#F4F1EA" stroke-linecap="round" stroke-linejoin="round" stroke-width="10.5"><path d="M226 106V50A14 14 0 0 1 240 36H244M214 69H241"/><circle cx="270" cy="87" r="19.5"/><path d="M289.5 69V106"/><path d="M317 106V88A18.5 18.5 0 0 1 335.5 69.5"/><circle cx="367" cy="87" r="19.5"/><path d="M386.5 69V106"/></g>
+      </svg>
+    </a>
+    <div class="disclaimer">
+      <p>Fara is an investigational device in preclinical development. It has not been cleared or approved by the FDA or any other regulator and is not available for clinical use. In a medical emergency, call 911. Information on this site is not a substitute for advice from your doctor.</p>
+      <p style="margin-top:12px">© 2026 Fara. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Copy email */
+(function(){
+  var b=document.getElementById('copy'), e=document.getElementById('email');
+  if(!b||!e) return;
+  b.addEventListener('click',function(){
+    var t=e.textContent.trim();
+    var done=function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy email'},1800)};
+    var fallback=function(){var r=document.createRange();r.selectNodeContents(e);var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected';};
+    try{navigator.clipboard.writeText(t).then(done,fallback)}catch(err){fallback()}
+  });
+})();
+
+/* The trace: spike-and-wave activity (coral) that goes quiet (teal) where it crosses the implant. */
+(function(){
+  var c=document.getElementById('trace'), hero=c&&c.parentElement, imp=document.querySelector('.implant');
+  if(!c) return;
+  var copy=document.querySelector('.hero-copy');
+  var ctx=c.getContext('2d'), dpr=1, W=0, H=0, bx=0, by=0, amp=60, cx=0;
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var P=230, phase=0, last=0, running=true;
+  function size(){
+    var r=hero.getBoundingClientRect(), ir=imp.getBoundingClientRect();
+    dpr=Math.min(window.devicePixelRatio||1,2);
+    W=r.width; H=r.height; c.width=W*dpr; c.height=H*dpr;
+    amp=Math.max(36,Math.min(70,ir.width*.19));
+    bx=ir.left-r.left+ir.width/2; by=ir.bottom-r.top+amp*1.3;
+    // Where the trace runs behind the headline copy (side-by-side layout), keep it faint so text stays readable.
+    var cr=copy.getBoundingClientRect();
+    cx=(by-amp<cr.bottom-r.top)?Math.min(cr.right-r.left,bx-60):0;
+    draw();
+  }
+  // Ictal-looking activity: irregular, high-amplitude spike-and-wave discharges with occasional polyspikes.
+  var GAP=46;
+  function h(k){var v=Math.sin(k*127.1+311.7)*43758.5453;return v-Math.floor(v)}
+  function kern(d){ // one discharge: sharp upstroke, overshoot, slow after-wave
+    if(d<0||d>58) return 0;
+    if(d<4) return -d/4;
+    if(d<12) return -1+(d-4)/8*1.6;
+    if(d<20) return .6-(d-12)/8*.6;
+    return -.24*Math.sin(Math.PI*(d-20)/38);
+  }
+  function seizure(u){
+    var k0=Math.floor(u/GAP), v=0;
+    for(var k=k0-2;k<=k0+1;k++){
+      var pk=k*GAP+(h(k)-.5)*22, a=.55+.55*h(k+17), d=u-pk;
+      v+=a*kern(d);
+      if(h(k+31)<.4) v+=.65*a*(d>=9&&d<29?kern(d-9):0);   // polyspike
+    }
+    return v+.07*(Math.sin(u*.47)+Math.sin(u*1.13+.5)+.7*Math.sin(u*2.3+1.7));
+  }
+  function ripple(u){return .045*Math.sin(u*.33)+.03*Math.sin(u*.81+1.1)}
+  function smooth(t){t=Math.max(0,Math.min(1,t));return t*t*(3-2*t)}
+  function y(x){
+    var u=x-phase;
+    var s=1-smooth((x-(bx-16))/16);               // seizure is quenched at the implant
+    var r=x<=bx?1:Math.pow(Math.max(0,1-(x-bx)/(Math.max(1,W-bx)*.85)),1.6); // ripples fade to a flat line
+    return by+amp*(s*seizure(u)+(1-s)*r*ripple(u));
+  }
+  function stroke(x0,x1,color,alpha){
+    ctx.beginPath(); ctx.moveTo(x0,y(x0));
+    for(var x=x0+1.5;x<=x1;x+=1.5) ctx.lineTo(x,y(x));
+    ctx.strokeStyle=color; ctx.globalAlpha=alpha; ctx.lineWidth=2.5; ctx.lineJoin='round'; ctx.lineCap='round'; ctx.stroke();
+  }
+  function draw(){
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    // faint baseline grid, like an EEG chart
+    ctx.globalAlpha=1; ctx.strokeStyle='rgba(244,241,234,.05)'; ctx.lineWidth=1;
+    for(var gx=(bx%48);gx<W;gx+=48){ctx.beginPath();ctx.moveTo(gx,by-amp*1.6);ctx.lineTo(gx,by+amp*1.6);ctx.stroke()}
+    var coral='#F08A6C';
+    if(cx>0){
+      coral=ctx.createLinearGradient(0,0,bx,0);
+      var f=Math.max(0,Math.min(1,cx/bx)), g=Math.min(1,f+120/bx);
+      coral.addColorStop(0,'rgba(240,138,108,.14)');
+      coral.addColorStop(f,'rgba(240,138,108,.14)');
+      coral.addColorStop(g,'rgba(240,138,108,1)');
+      coral.addColorStop(1,'rgba(240,138,108,1)');
+    }
+    stroke(0,bx,coral,.9);
+    stroke(bx,W,'#4CC3B1',.9);
+    ctx.globalAlpha=1; ctx.strokeStyle='#4CC3B1'; ctx.lineWidth=5; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(bx,by-amp*1.05); ctx.lineTo(bx,by+amp*1.05); ctx.stroke();
+  }
+  function loop(t){
+    if(!running){last=0;return}
+    if(last) phase+=(t-last)*.085;
+    last=t; draw(); requestAnimationFrame(loop);
+  }
+  size(); addEventListener('resize',size);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(size);
+  if(!reduce){
+    new IntersectionObserver(function(es){running=es[0].isIntersecting; if(running) requestAnimationFrame(loop)}).observe(hero);
+  }
+})();
+</script>
+
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const canvas = document.getElementById('implant-canvas');
+const box = canvas.parentElement;
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+let renderer;
+try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); }
+catch (e) { box.style.visibility = 'hidden'; throw e; }
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+const camera = new THREE.PerspectiveCamera(32, 1, 0.01, 100);
+camera.position.set(0, 0, 4.2);
+
+const key = new THREE.DirectionalLight(0xffffff, 2.2); key.position.set(2.5, 3, 3); scene.add(key);
+const rimTeal = new THREE.DirectionalLight(0x4CC3B1, 3.0); rimTeal.position.set(-3, 0.5, -2); scene.add(rimTeal);
+const rimCoral = new THREE.DirectionalLight(0xF08A6C, 1.2); rimCoral.position.set(3, -2, -1.5); scene.add(rimCoral);
+
+const tilt = new THREE.Group(); tilt.rotation.x = 0.08; tilt.rotation.z = -0.1; scene.add(tilt);
+const spin = new THREE.Group(); tilt.add(spin);
+
+const titanium = new THREE.MeshPhysicalMaterial({
+  color: 0xC3C8CC, metalness: 1, roughness: 0.34, clearcoat: 0.3, clearcoatRoughness: 0.4,
+  envMapIntensity: 1.15, side: THREE.DoubleSide
+});
+
+function resize() {
+  const r = box.getBoundingClientRect();
+  renderer.setSize(r.width, r.height, false);
+  camera.aspect = r.width / r.height; camera.updateProjectionMatrix();
+}
+resize(); addEventListener('resize', resize);
+
+new GLTFLoader().load('fara-implant.glb', (gltf) => {
+  const model = gltf.scene;
+  model.traverse((o) => { if (o.isMesh) { o.material = titanium; o.geometry.computeVertexNormals(); } });
+  const holder = new THREE.Group(); holder.add(model);
+  const b = new THREE.Box3().setFromObject(holder);
+  const s = 2.15 / Math.max(...b.getSize(new THREE.Vector3()).toArray());
+  holder.scale.setScalar(s);
+  holder.position.sub(b.getCenter(new THREE.Vector3()).multiplyScalar(s));
+  spin.add(holder);
+  renderer.render(scene, camera);
+  canvas.classList.add('ready');
+  start();
+}, undefined, () => { box.style.visibility = 'hidden'; });
+
+let visible = true, raf = 0, prev = 0;
+function frame(t) {
+  if (prev) spin.rotation.y += (t - prev) * 0.00045;
+  prev = t;
+  renderer.render(scene, camera);
+  raf = visible ? requestAnimationFrame(frame) : 0;
+}
+function start() {
+  if (reduce) { spin.rotation.y = 0.5; renderer.render(scene, camera); return; }
+  new IntersectionObserver(([e]) => {
+    visible = e.isIntersecting;
+    if (visible && !raf) { prev = 0; raf = requestAnimationFrame(frame); }
+  }).observe(box);
+}
+</script>
+</body>
+</html>
