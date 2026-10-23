@@ -87,13 +87,18 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .hero{position:relative;overflow:hidden;padding-block:clamp(28px,4vw,56px) clamp(150px,12vw,170px)}
 #trace{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .hero .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);align-items:start;gap:32px}
-.hero-copy{display:flex;flex-direction:column;gap:24px;padding-block:16px;position:relative;z-index:2}
+.hero-copy{display:contents}
+.hero-copy>*{grid-column:1;position:relative;z-index:2}
+.hero .wrap{row-gap:24px;padding-top:16px;padding-bottom:16px}
+/* the slot spans the headline and description rows; the implant is centered in it without stretching those rows */
+.implant-slot{grid-column:2;grid-row:1 / 3;position:relative;align-self:stretch;z-index:1}
+.implant-slot .implant{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
 .hero h1{font-size:clamp(2.6rem,5.6vw,5rem);line-height:1;font-weight:300;letter-spacing:-.035em}
 .hero h1 span{white-space:nowrap}
 .hero-actions{display:flex;flex-wrap:wrap;gap:12px}
 .status{font-size:.9rem;color:var(--muted-dark);display:flex;align-items:center;gap:10px}
 .status::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px rgba(76,195,177,.18);flex:none}
-.implant{position:relative;aspect-ratio:4/5;width:100%;max-width:330px;justify-self:center;align-self:start;margin-top:-8px;z-index:1}
+.implant{position:relative;aspect-ratio:4/5;width:100%;max-width:330px;z-index:1}
 .implant-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity 1s ease;pointer-events:none}
 .implant.live .implant-poster{opacity:0}
 #implant-canvas{position:relative;width:100%;height:100%;display:block;opacity:0;transition:opacity 1s ease}
@@ -184,7 +189,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 @media (max-width:900px){
   .hero .wrap{grid-template-columns:1fr}
   .hero{padding-bottom:24px}
-  .implant{max-width:260px;order:2;margin:0 auto 150px;align-self:center}
+  .implant-slot{grid-column:1;grid-row:auto;order:2;margin:8px 0 150px}
+  .implant-slot .implant{position:relative;left:auto;top:auto;transform:none;max-width:260px;margin:0 auto}
   .split,.tech-head,.traction{grid-template-columns:1fr}
   .team,.audiences{grid-template-columns:1fr}
   .props{grid-template-columns:1fr}
@@ -253,20 +259,22 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
         </div>
         <p class="status">In preclinical development. Patent pending.</p>
       </div>
-      <div class="implant">
-        <img class="implant-poster" src="implant-poster.webp" alt="" width="330" height="412">
-        <canvas id="implant-canvas" aria-label="The Fara implant, a thin perforated disc, rotating slowly" role="img"></canvas>
+      <div class="implant-slot">
+        <div class="implant">
+          <img class="implant-poster" src="implant-poster.webp" alt="" width="330" height="412">
+          <canvas id="implant-canvas" aria-label="The Fara implant, a thin perforated disc, rotating slowly" role="img"></canvas>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="band band--cream" aria-labelledby="problem-title">
     <div class="wrap split">
-      <h2 id="problem-title" class="h2">Surgery can end the seizures. Too often it costs memory.</h2>
+      <h2 id="problem-title" class="h2">Surgery can end seizures. Too often it costs memory.</h2>
       <div>
         <div class="prose">
-          <p class="lede">For people whose seizures start in one part of the temporal lobe, removing that tissue is often the most effective option. But the hippocampus helps form new memories, and taking it out can leave lasting deficits.</p>
-          <p>Hippocampal transection takes a different approach. Instead of removing tissue, the surgeon makes precise cuts that interrupt the pathways seizures travel along. Fara is built to make those cuts work harder: a film placed in the transection that keeps electrical activity from coupling across the gap.</p>
+          <p class="lede">Gold-standard surgical resection is an option for only half of patients with mesial temporal lobe epilepsy (MTLE), and leaves the other half gambling with their memory.</p>
+          <p>Fara is a passive implant to treat this drug-resistant focal epilepsy. Placed during hippocampal transection therapy, it's designed to block seizures from spreading without a battery, leads or programming, making a memory-saving procedure viable.</p>
         </div>
         <ul class="facts">
           <li><strong>50M</strong><span>people worldwide live with epilepsy.<sup><a href="#src1" aria-label="Source 1">1</a></sup></span></li>
@@ -426,7 +434,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 (function(){
   var c=document.getElementById('trace'), hero=c&&c.parentElement, imp=document.querySelector('.implant');
   if(!c) return;
-  var copy=document.querySelector('.hero-copy');
+  var copyEls=document.querySelectorAll('.hero-copy>*');
+  function copyBox(){var b={right:0,bottom:0};copyEls.forEach(function(e){var q=e.getBoundingClientRect();b.right=Math.max(b.right,q.right);b.bottom=Math.max(b.bottom,q.bottom)});return b}
   var ctx=c.getContext('2d'), dpr=1, W=0, H=0, bx=0, by=0, amp=60, cx=0;
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var P=230, phase=0, last=0, running=true;
@@ -436,10 +445,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     W=r.width; H=r.height; c.width=W*dpr; c.height=H*dpr;
     amp=Math.max(34,Math.min(60,ir.width*.18));
     bx=ir.left-r.left+ir.width/2;
-    var cb=copy.getBoundingClientRect().bottom-r.top;
+    var cr=copyBox(), cb=cr.bottom-r.top;
     by=Math.max(ir.bottom-r.top+amp*1.3, cb+amp*1.2);
     // Where the trace runs behind the headline copy (side-by-side layout), keep it faint so text stays readable.
-    var cr=copy.getBoundingClientRect();
     cx=(by-amp<cr.bottom-r.top)?Math.min(cr.right-r.left,bx-60):0;
     draw();
   }
@@ -477,9 +485,6 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   }
   function draw(){
     ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
-    // faint baseline grid, like an EEG chart
-    ctx.globalAlpha=1; ctx.strokeStyle='rgba(244,241,234,.05)'; ctx.lineWidth=1;
-    for(var gx=(bx%48);gx<W;gx+=48){ctx.beginPath();ctx.moveTo(gx,by-amp*1.6);ctx.lineTo(gx,by+amp*1.6);ctx.stroke()}
     var coral='#F08A6C';
     if(cx>0){
       coral=ctx.createLinearGradient(0,0,bx,0);
