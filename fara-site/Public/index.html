@@ -14,6 +14,16 @@
 <meta property="og:description" content="Stop a seizure, save a memory. A passive implant for drug-resistant focal epilepsy.">
 <meta property="og:url" content="https://faraneuro.com/">
 <meta property="og:image" content="https://faraneuro.com/icon-512.png">
+<link rel="preload" href="implant-poster.webp" as="image">
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
+</script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/utils/BufferGeometryUtils.js">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/environments/RoomEnvironment.js">
+<script>window.__glb=fetch('fara-implant.glb').then(function(r){if(!r.ok)throw new Error(r.status);return r.arrayBuffer()});</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
@@ -74,16 +84,19 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .nav .btn:hover{color:var(--navy)}
 
 /* Hero */
-.hero{position:relative;overflow:hidden;padding-block:clamp(48px,7vw,96px) clamp(180px,16vw,210px)}
+.hero{position:relative;overflow:hidden;padding-block:clamp(28px,4vw,56px) clamp(150px,12vw,170px)}
 #trace{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.hero .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:center;gap:32px}
-.hero-copy{display:flex;flex-direction:column;gap:28px;padding-block:24px;position:relative;z-index:2}
-.hero h1{font-size:clamp(2.75rem,6.4vw,5.5rem);line-height:.98;font-weight:300;letter-spacing:-.035em}
+.hero .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);align-items:start;gap:32px}
+.hero-copy{display:flex;flex-direction:column;gap:24px;padding-block:16px;position:relative;z-index:2}
+.hero h1{font-size:clamp(2.6rem,5.6vw,5rem);line-height:1;font-weight:300;letter-spacing:-.035em}
+.hero h1 span{white-space:nowrap}
 .hero-actions{display:flex;flex-wrap:wrap;gap:12px}
 .status{font-size:.9rem;color:var(--muted-dark);display:flex;align-items:center;gap:10px}
 .status::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px rgba(76,195,177,.18);flex:none}
-.implant{position:relative;aspect-ratio:4/5;width:100%;max-width:360px;justify-self:center;align-self:end;z-index:1}
-#implant-canvas{width:100%;height:100%;display:block;opacity:0;transition:opacity 1.2s ease}
+.implant{position:relative;aspect-ratio:4/5;width:100%;max-width:330px;justify-self:center;align-self:start;margin-top:-8px;z-index:1}
+.implant-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity 1s ease;pointer-events:none}
+.implant.live .implant-poster{opacity:0}
+#implant-canvas{position:relative;width:100%;height:100%;display:block;opacity:0;transition:opacity 1s ease}
 #implant-canvas.ready{opacity:1}
 .trace-legend{position:absolute;left:0;right:0;bottom:-6px;display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted-dark);pointer-events:none}
 .trace-legend span:first-child{color:var(--coral)}
@@ -139,8 +152,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 
 /* Team */
 .team{list-style:none;margin:clamp(40px,5vw,64px) 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(40px,5vw,64px) clamp(32px,6vw,96px)}
-.person{display:grid;grid-template-columns:120px minmax(0,1fr);gap:28px;align-items:start}
-.person img{width:120px;height:120px;border-radius:50%;object-fit:cover;background:var(--navy);display:block}
+.person{display:grid;grid-template-columns:176px minmax(0,1fr);gap:32px;align-items:start}
+.person img{width:176px;height:176px;border-radius:50%;object-fit:cover;background:var(--navy);display:block}
 .person .role{font:400 .95rem/1.35 var(--display);color:#1E6E63;margin-top:6px}
 .person .bio{margin-top:12px;color:var(--muted-light);max-width:32em}
 .person .more{margin-top:10px;font-size:.95rem;color:var(--muted-light)}
@@ -171,7 +184,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 @media (max-width:900px){
   .hero .wrap{grid-template-columns:1fr}
   .hero{padding-bottom:24px}
-  .implant{max-width:260px;order:2;margin:0 auto 150px}
+  .implant{max-width:260px;order:2;margin:0 auto 150px;align-self:center}
   .split,.tech-head,.traction{grid-template-columns:1fr}
   .team,.audiences{grid-template-columns:1fr}
   .props{grid-template-columns:1fr}
@@ -188,8 +201,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 }
 @media (max-width:480px){
   .facts li{grid-template-columns:1fr;gap:6px}
-  .person{grid-template-columns:88px minmax(0,1fr);gap:20px}
-  .person img{width:88px;height:88px}
+  .person{grid-template-columns:1fr;gap:18px}
+  .person img{width:160px;height:160px}
   .logo svg{height:34px}
 }
 @media (prefers-reduced-motion:reduce){
@@ -232,7 +245,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     <canvas id="trace" aria-hidden="true"></canvas>
     <div class="wrap">
       <div class="hero-copy">
-        <h1 id="hero-title">Stop a seizure, save a memory.</h1>
+        <h1 id="hero-title"><span>Stop a seizure,</span> <span>save a memory.</span></h1>
         <p class="lede">Fara is a passive implant for drug-resistant focal epilepsy. Placed during hippocampal transection, its thin conductive film is designed to block the electrical coupling that lets a seizure spread, with no battery, no leads and no programming.</p>
         <div class="hero-actions">
           <a class="btn btn--teal" href="#technology">See how it works</a>
@@ -241,6 +254,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
         <p class="status">In preclinical development. Patent pending.</p>
       </div>
       <div class="implant">
+        <img class="implant-poster" src="implant-poster.webp" alt="" width="330" height="412">
         <canvas id="implant-canvas" aria-label="The Fara implant, a thin perforated disc, rotating slowly" role="img"></canvas>
       </div>
     </div>
@@ -322,7 +336,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
       <h2 id="team-title" class="h2">Team</h2>
       <ul class="team">
         <li class="person">
-          <img src="team/cedric-levi.jpg" alt="Cedric Levi" width="120" height="120" loading="lazy">
+          <img src="team/cedric-levi.jpg" alt="Cedric Levi" width="176" height="176" loading="lazy">
           <div>
             <h3 class="h3">Cedric Levi</h3>
             <p class="role">Co-Founder</p>
@@ -331,7 +345,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
           </div>
         </li>
         <li class="person">
-          <img src="team/dominique-durand.jpg" alt="Dr. Dominique Durand" width="120" height="120" loading="lazy">
+          <img src="team/dominique-durand.jpg" alt="Dr. Dominique Durand" width="176" height="176" loading="lazy">
           <div>
             <h3 class="h3">Dr. Dominique Durand, PhD</h3>
             <p class="role">Co-Founder and Principal Investigator</p>
@@ -340,7 +354,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
           </div>
         </li>
         <li class="person">
-          <img src="team/michael-staudt.jpg" alt="Dr. Michael Staudt" width="120" height="120" loading="lazy">
+          <img src="team/michael-staudt.jpg" alt="Dr. Michael Staudt" width="176" height="176" loading="lazy">
           <div>
             <h3 class="h3">Dr. Michael Staudt</h3>
             <p class="role">Clinical Advisor, Neurosurgeon</p>
@@ -349,7 +363,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
           </div>
         </li>
         <li class="person">
-          <img src="team/jonathan-sakai.jpg" alt="Jonathan Sakai" width="120" height="120" loading="lazy">
+          <img src="team/jonathan-sakai.jpg" alt="Jonathan Sakai" width="176" height="176" loading="lazy">
           <div>
             <h3 class="h3">Jonathan Sakai</h3>
             <p class="role">Business Advisor</p>
@@ -420,8 +434,10 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     var r=hero.getBoundingClientRect(), ir=imp.getBoundingClientRect();
     dpr=Math.min(window.devicePixelRatio||1,2);
     W=r.width; H=r.height; c.width=W*dpr; c.height=H*dpr;
-    amp=Math.max(36,Math.min(70,ir.width*.19));
-    bx=ir.left-r.left+ir.width/2; by=ir.bottom-r.top+amp*1.3;
+    amp=Math.max(34,Math.min(60,ir.width*.18));
+    bx=ir.left-r.left+ir.width/2;
+    var cb=copy.getBoundingClientRect().bottom-r.top;
+    by=Math.max(ir.bottom-r.top+amp*1.3, cb+amp*1.2);
     // Where the trace runs behind the headline copy (side-by-side layout), keep it faint so text stays readable.
     var cr=copy.getBoundingClientRect();
     cx=(by-amp<cr.bottom-r.top)?Math.min(cr.right-r.left,bx-60):0;
@@ -491,9 +507,6 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 })();
 </script>
 
-<script type="importmap">
-{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
-</script>
 <script type="module">
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -505,7 +518,7 @@ const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 let renderer;
 try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); }
-catch (e) { box.style.visibility = 'hidden'; throw e; }
+catch (e) { canvas.style.display = 'none'; throw e; }
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -522,8 +535,9 @@ const key = new THREE.DirectionalLight(0xffffff, 2.2); key.position.set(2.5, 3, 
 const rimTeal = new THREE.DirectionalLight(0x4CC3B1, 3.0); rimTeal.position.set(-3, 0.5, -2); scene.add(rimTeal);
 const rimCoral = new THREE.DirectionalLight(0xF08A6C, 1.2); rimCoral.position.set(3, -2, -1.5); scene.add(rimCoral);
 
+const spinStart = 0.5;
 const tilt = new THREE.Group(); tilt.rotation.x = 0.08; tilt.rotation.z = -0.1; scene.add(tilt);
-const spin = new THREE.Group(); tilt.add(spin);
+const spin = new THREE.Group(); spin.rotation.y = spinStart; tilt.add(spin);
 
 const titanium = new THREE.MeshPhysicalMaterial({
   color: 0xC3C8CC, metalness: 1, roughness: 0.34, clearcoat: 0.3, clearcoatRoughness: 0.4,
@@ -537,7 +551,7 @@ function resize() {
 }
 resize(); addEventListener('resize', resize);
 
-new GLTFLoader().load('fara-implant.glb', (gltf) => {
+const onModel = (gltf) => {
   const model = gltf.scene;
   model.traverse((o) => { if (o.isMesh) { o.material = titanium; o.geometry.computeVertexNormals(); } });
   const holder = new THREE.Group(); holder.add(model);
@@ -547,9 +561,11 @@ new GLTFLoader().load('fara-implant.glb', (gltf) => {
   holder.position.sub(b.getCenter(new THREE.Vector3()).multiplyScalar(s));
   spin.add(holder);
   renderer.render(scene, camera);
-  canvas.classList.add('ready');
+  canvas.classList.add('ready'); box.classList.add('live');
   start();
-}, undefined, () => { box.style.visibility = 'hidden'; });
+};
+const onFail = (e) => { console.error(e); canvas.style.display = 'none'; };
+window.__glb.then((buf) => new GLTFLoader().parse(buf, '', onModel, onFail)).catch(onFail);
 
 let visible = true, raf = 0, prev = 0;
 function frame(t) {
@@ -559,7 +575,7 @@ function frame(t) {
   raf = visible ? requestAnimationFrame(frame) : 0;
 }
 function start() {
-  if (reduce) { spin.rotation.y = 0.5; renderer.render(scene, camera); return; }
+  if (reduce) { renderer.render(scene, camera); return; }
   new IntersectionObserver(([e]) => {
     visible = e.isIntersecting;
     if (visible && !raf) { prev = 0; raf = requestAnimationFrame(frame); }
