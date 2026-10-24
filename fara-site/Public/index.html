@@ -55,7 +55,10 @@ a{color:inherit}
 h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance;letter-spacing:-.02em}
 p{margin:0}
 .wrap{max-width:var(--max);margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
-.band{padding-block:clamp(72px,10vw,128px)}
+.band{padding-block:clamp(56px,6vw,88px)}
+/* each section fills exactly one screen under the sticky header; taller content just grows */
+.hero,.band,.story{min-height:calc(100vh - 72px);min-height:calc(100svh - 72px - env(safe-area-inset-top,0px));display:flex;flex-direction:column;justify-content:center}
+.hero>.wrap,.band>.wrap,.story>.wrap{width:100%}
 .band--cream{background:var(--cream);color:var(--ink)}
 .band--navy{background:var(--navy);color:var(--cream)}
 .band--deep{background:var(--navy-2);color:var(--cream)}
@@ -149,17 +152,16 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .substeps li.now::before{border-color:var(--teal);box-shadow:0 0 0 4px rgba(76,195,177,.25)}
 .substeps b{font:500 1rem/1.35 var(--display);color:var(--ink)}
 .substeps span{font-size:.9rem;color:var(--muted-light)}
-.traction{margin-top:clamp(64px,8vw,112px);padding-top:clamp(40px,5vw,64px);border-top:1px solid var(--rule-light);display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(32px,6vw,96px);align-items:start}
+.traction{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(32px,6vw,96px);align-items:start}
 .wins{display:flex;flex-direction:column;gap:28px}
 .grant{display:flex;flex-direction:column;gap:6px}
-.grant strong{font:300 clamp(3.5rem,8vw,6rem)/.95 var(--display);letter-spacing:-.045em;color:var(--ink);font-variant-numeric:tabular-nums}
-.grant span{font:400 1.15rem/1.35 var(--display);color:var(--ink)}
-.award{display:flex;gap:16px;align-items:center;padding-top:24px;border-top:1px solid var(--rule-light);color:var(--muted-light)}
-.award strong{color:var(--ink);font-weight:700}
+.grant strong{font:300 clamp(4.5rem,13vw,11rem)/.9 var(--display);letter-spacing:-.05em;color:var(--teal);font-variant-numeric:tabular-nums}
+.grant span{font:400 clamp(1.15rem,1.8vw,1.5rem)/1.35 var(--display);color:var(--cream)}
+.award{display:flex;gap:16px;align-items:center;padding-top:24px;border-top:1px solid var(--rule-dark);color:var(--muted-dark)}
+.award strong{color:var(--cream);font-weight:700}
 
 /* Team */
-#team{scroll-margin-top:48px} /* this band has no top padding; leave breathing room under the header (only empty cream shows above) */
-.team{list-style:none;margin:clamp(40px,5vw,64px) 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(40px,5vw,64px) clamp(32px,6vw,96px)}
+.team{list-style:none;margin:clamp(28px,3.5vw,48px) 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(32px,3.5vw,48px) clamp(32px,6vw,96px)}
 .person{display:grid;grid-template-columns:176px minmax(0,1fr);gap:32px;align-items:start}
 .person img{width:176px;height:176px;border-radius:50%;object-fit:cover;background:var(--navy);display:block}
 .person .role{font:400 .95rem/1.35 var(--display);color:#1E6E63;margin-top:6px}
@@ -168,18 +170,19 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .person .more a{color:var(--ink)}
 .textlink{color:var(--ink);text-decoration:underline;text-decoration-color:var(--teal);text-decoration-thickness:2px;text-underline-offset:4px}
 .textlink:hover{text-decoration-color:var(--coral)}
+.textlink--dark{color:var(--cream)}
 
 /* Tell us your story — the page's loud moment: a full teal band */
-.story{background:var(--teal);color:var(--navy);padding-block:clamp(88px,13vw,176px)}
-.story h2{font-size:clamp(3.5rem,11vw,10rem);line-height:.9;font-weight:300;letter-spacing:-.05em;max-width:9em}
+.story{background:var(--teal);color:var(--navy);padding-block:clamp(56px,6vw,88px)}
+.story h2{font-size:clamp(3.5rem,8.4vw,8rem);line-height:.92;font-weight:300;letter-spacing:-.05em}
 .story .lede{margin-top:clamp(24px,3vw,40px);color:var(--navy);font-size:clamp(1.15rem,1.9vw,1.5rem);max-width:30em}
-.email-row{display:flex;flex-wrap:wrap;align-items:center;gap:16px 20px;margin-top:clamp(40px,5vw,64px)}
+.email-row{display:flex;flex-wrap:wrap;align-items:center;gap:16px 20px;margin-top:clamp(32px,3.5vw,48px)}
 .email{font:400 clamp(1.6rem,5.2vw,4rem)/1.1 var(--display);letter-spacing:-.03em;color:var(--navy);text-decoration:none;border-bottom:3px solid var(--navy);padding-bottom:6px;overflow-wrap:anywhere}
 .email:hover{border-color:var(--cream)}
 .story :focus-visible{outline-color:var(--navy)}
 .copy{font:500 .95rem/1 var(--display);background:var(--navy);border:0;color:var(--cream);border-radius:999px;padding:.85em 1.3em;cursor:pointer}
 .copy:hover{background:var(--navy-2)}
-.audiences{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,4vw,56px);margin-top:clamp(56px,7vw,96px)}
+.audiences{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,4vw,56px);margin-top:clamp(40px,4.5vw,64px)}
 .aud{padding-top:20px;border-top:1.5px solid rgba(14,37,48,.3);display:flex;flex-direction:column;gap:8px}
 .aud p{color:rgba(14,37,48,.82)}
 
@@ -240,6 +243,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
       </svg>
     </a>
     <nav class="nav" aria-label="Main">
+      <a href="#mission">Our Mission</a>
       <a href="#technology">Technology</a>
       <a href="#progress">Progress</a>
       <a href="#team">Team</a>
@@ -271,7 +275,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     </div>
   </section>
 
-  <section class="band band--cream" aria-labelledby="problem-title">
+  <section id="mission" class="band band--cream" aria-labelledby="problem-title">
     <div class="wrap split">
       <h2 id="problem-title" class="h2">Surgery can end seizures. Too often it costs memory.</h2>
       <div>
@@ -292,24 +296,24 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   <section id="technology" class="band band--navy" aria-labelledby="tech-title">
     <div class="wrap">
       <div class="tech-head">
-        <h2 id="tech-title" class="h2">A conductor in the cut</h2>
-        <p class="lede muted">Seizures spread partly through ephaptic coupling, where the electric field of one group of firing neurons pushes its neighbours to fire too. A perforated conductive film placed across the transection shunts that field, so activity on one side has far less reach on the other.</p>
+        <h2 id="tech-title" class="h2">An electric wall</h2>
+        <p class="lede muted">Seizures partly spread through ephaptic coupling, allowing them to jump over surgical cuts. Fara creates an electric wall that stops them in their tracks. <a class="textlink textlink--dark" href="research">Learn more</a></p>
       </div>
       <div class="props">
         <div class="prop">
           <svg viewBox="0 0 44 44" fill="none" stroke-linecap="round" stroke-width="3" aria-hidden="true"><path d="M4 22h8l5-12 6 24 4-12" stroke="#F08A6C"/><path d="M31 8v28M36 22h4" stroke="#4CC3B1"/></svg>
-          <h3 class="h3">No power, nothing to tune</h3>
-          <p>The film works passively. There is no battery to replace, no lead to fracture and no stimulation schedule to adjust after surgery.</p>
+          <h3 class="h3">No power, no tuning</h3>
+          <p>Fara works passively. There are no batteries or electrodes to replace, and no hospitals to return to. We strive to keep patients out of the EMU.</p>
         </div>
         <div class="prop">
           <svg viewBox="0 0 44 44" fill="none" stroke="#4CC3B1" stroke-width="3" aria-hidden="true"><circle cx="22" cy="22" r="16"/><circle cx="16" cy="18" r="2.5" fill="#4CC3B1" stroke="none"/><circle cx="25" cy="15" r="2.5" fill="#4CC3B1" stroke="none"/><circle cx="28" cy="25" r="2.5" fill="#4CC3B1" stroke="none"/><circle cx="19" cy="28" r="2.5" fill="#4CC3B1" stroke="none"/></svg>
-          <h3 class="h3">Titanium, MRI-compatible</h3>
-          <p>The commercial implant is designed in titanium for long-term biocompatibility, so patients can keep getting the imaging their care depends on.</p>
+          <h3 class="h3">MRI &amp; Biocompatible</h3>
+          <p>Custom-built for the patient using titanium. Designed for long-term use without imaging complications.</p>
         </div>
         <div class="prop">
           <svg viewBox="0 0 44 44" fill="none" stroke-linecap="round" stroke-width="3" aria-hidden="true"><path d="M8 34 34 8" stroke="#F4F1EA"/><path d="M26 34h12M8 8v10" stroke="#4CC3B1"/></svg>
           <h3 class="h3">Fits the existing procedure</h3>
-          <p>Fara is placed through the same approach as hippocampal transection. In cadaver studies, neurosurgeons gave it top marks for ease of adoption.</p>
+          <p>Our implant supplements multiple hippocampal transection therapy. Fara is neurosurgeon-approved, receiving top marks in ease of adoption.</p>
         </div>
       </div>
     </div>
@@ -319,9 +323,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     <div class="wrap">
       <h2 id="progress-title" class="h2">Where we are</h2>
       <ol class="timeline">
-        <li class="step step--done"><span class="node"></span><span class="step-n">1</span><h3 class="h3">Concept and patent</h3><p>Perforated conductive film invented at Case Western Reserve University.</p><span class="tag">Patent pending</span></li>
+        <li class="step step--done"><span class="node"></span><span class="step-n">1</span><h3 class="h3">Concept and patent</h3><p>Invented in Dr. Durand's lab at Case Western Reserve University.</p><span class="tag">Patent pending</span></li>
         <li class="step step--done"><span class="node"></span><span class="step-n">2</span><h3 class="h3">Surgical feasibility</h3><p>Cadaver studies with neurosurgeons confirmed the implant fits the procedure.</p><span class="tag">Complete</span></li>
-        <li class="step step--now"><span class="node"></span><span class="step-n">3</span><h3 class="h3">Preclinical efficacy</h3><p>Measuring how much the film attenuates seizure propagation, from tissue to living brain to people.</p>
+        <li class="step step--now"><span class="node"></span><span class="step-n">3</span><h3 class="h3">Preclinical efficacy</h3><p>Measuring how much the film blocks seizure propagation, from tissue to live animals to people.</p>
           <ol class="substeps">
             <li class="done"><b>Mouse brain slices</b><span>In vitro</span></li>
             <li class="done"><b>Rats, acute</b><span>In vivo</span></li>
@@ -329,9 +333,14 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
             <li><b>Patients</b><span>First human observations, ahead of formal trials</span></li>
           </ol>
           <span class="tag">In progress</span></li>
-        <li class="step"><span class="node"></span><span class="step-n">4</span><h3 class="h3">Clinical trials</h3><p>Human studies to support a regulatory submission.</p><span class="tag">Next</span></li>
+        <li class="step"><span class="node"></span><span class="step-n">4</span><h3 class="h3">Clinical trials</h3><p>Human studies to support FDA submission.</p><span class="tag">Next</span></li>
       </ol>
 
+    </div>
+  </section>
+
+  <section id="traction" class="band band--navy" aria-label="Traction">
+    <div class="wrap">
       <div class="traction">
         <h2 class="h2">Traction</h2>
         <div class="wins">
@@ -342,7 +351,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     </div>
   </section>
 
-  <section id="team" class="band band--cream" style="padding-top:0" aria-labelledby="team-title">
+  <section id="team" class="band band--cream band--team" aria-labelledby="team-title">
     <div class="wrap">
       <h2 id="team-title" class="h2">Team</h2>
       <ul class="team">
