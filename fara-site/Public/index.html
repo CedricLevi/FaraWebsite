@@ -120,9 +120,15 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .facts{list-style:none;margin:40px 0 0;padding:0;display:grid;gap:0;border-top:1px solid var(--rule-light)}
 .facts li{display:grid;grid-template-columns:8.5rem minmax(0,1fr);gap:20px;padding-block:20px;border-bottom:1px solid var(--rule-light);align-items:baseline}
 .facts strong{font:300 2rem/1 var(--display);letter-spacing:-.03em;color:var(--ink)}
-.facts li.pair{grid-template-columns:auto minmax(0,1fr) auto minmax(0,1fr);column-gap:14px}
+.facts{container-type:inline-size}
+/* 50% row: two pairs stacked when narrow; one line with equal gaps when there is room.
+   The first number stays on the number column of the rows above. */
+.facts li.pair{grid-template-columns:auto minmax(0,1fr);gap:12px 16px;align-items:center}
 .facts li.pair span{font-size:.95rem;line-height:1.45}
-.facts li.pair strong:nth-of-type(2){margin-left:10px}
+@container (min-width:560px){
+  .facts li.pair{display:flex;justify-content:space-between;align-items:center;gap:20px}
+  .facts li.pair span{white-space:nowrap}
+}
 .facts sup a{color:var(--muted-light);text-decoration:none;font-size:.75em}
 .sources{margin-top:20px;font-size:.8rem;color:var(--muted-light)}
 .sources a{color:inherit}
@@ -218,8 +224,6 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 }
 @media (max-width:480px){
   .facts li{grid-template-columns:1fr;gap:6px}
-  .facts li.pair{grid-template-columns:auto minmax(0,1fr);gap:10px 16px}
-  .facts li.pair strong:nth-of-type(2){margin-left:0}
   .person{grid-template-columns:1fr;gap:18px}
   .person img{width:160px;height:160px}
   .logo svg{height:34px}
@@ -293,7 +297,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
         <ul class="facts">
           <li><strong>50M</strong><span>people worldwide live with epilepsy.<sup><a href="#src1" aria-label="Source 1">1</a></sup></span></li>
           <li><strong>1 in 3</strong><span>keep having seizures despite medication.<sup><a href="#src2" aria-label="Source 2">2</a></sup></span></li>
-          <li class="pair"><strong>50%</strong><span>of surgical candidates can't receive the gold standard,</span><strong>50%</strong><span>of those who do suffer memory loss.</span></li>
+          <li class="pair"><strong>50%</strong><span>of surgical candidates<br>can't receive the gold standard,</span><strong>50%</strong><span>of those who do<br>suffer memory loss.</span></li>
         </ul>
         <p class="sources"><span id="src1">1. World Health Organization, Epilepsy fact sheet.</span> <span id="src2">2. Kwan &amp; Brodie, N Engl J Med 2000.</span></p>
       </div>
@@ -437,49 +441,64 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 </footer>
 
 <script>
-/* Section snapping on desktop: one wheel/trackpad gesture or Page Up/Down moves exactly one section.
+/* Section snapping on desktop: each scroll gesture (wheel notch, trackpad swipe, Page Up/Down) glides to the
+   next section. A new gesture during a glide continues straight on; trackpad momentum is ignored.
    Sections taller than the screen scroll normally until their edge is reached. Phones scroll freely. */
 (function(){
   var mq=matchMedia('(min-width:901px) and (min-height:700px)');
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var secs=[].slice.call(document.querySelectorAll('main>section'));
-  var HEAD=72, busy=false, lastWheel=0;
+  var HEAD=72, DUR=420;
+  var anim=null, target=0, lastT=0, lastAbs=0, gestureSnapped=false;
   function topOf(e){return Math.round(e.getBoundingClientRect().top+scrollY-HEAD)}
-  function current(){var y=scrollY+2,c=secs[0];for(var i=0;i<secs.length;i++){if(topOf(secs[i])<=y)c=secs[i]}return c}
-  function release(){if(performance.now()-lastWheel>200){busy=false}else{setTimeout(release,60)}}
-  function move(t){
-    busy=true;
-    var done=false,finish=function(){if(done)return;done=true;removeEventListener('scrollend',finish);release()};
-    addEventListener('scrollend',finish);setTimeout(finish,reduce?50:900);
-    scrollTo({top:t,behavior:reduce?'auto':'smooth'});
+  function maxY(){return document.documentElement.scrollHeight-innerHeight}
+  function tops(){return secs.map(topOf)}
+  function sectionAt(y){var t=tops(),k=0;for(var i=0;i<t.length;i++){if(t[i]<=y+2)k=i}return k}
+  function jump(y){scrollTo({top:y,behavior:'instant'})}
+  function glide(to){
+    target=Math.max(0,Math.min(maxY(),to));
+    if(reduce){jump(target);anim=null;return}
+    var from=scrollY,start=performance.now();
+    if(anim)cancelAnimationFrame(anim.id);
+    anim={};
+    (function step(now){
+      var p=Math.min(1,(now-start)/DUR),e=1-Math.pow(1-p,3);
+      jump(from+(target-from)*e);
+      if(p<1)anim.id=requestAnimationFrame(step);else anim=null;
+    })(start);
   }
-  function go(dir){
-    var y=scrollY,vh=innerHeight,c=current(),ct=topOf(c),max=document.documentElement.scrollHeight-vh;
+  // where a gesture from position y in direction dir should go, or null to scroll normally
+  function dest(y,dir){
+    var t=tops(),k=sectionAt(y),vh=innerHeight,bottom=(k+1<t.length?t[k+1]:maxY()+vh)-y;
     if(dir>0){
-      if(c.getBoundingClientRect().bottom>vh+2)return false;          // still inside a tall section
-      for(var i=0;i<secs.length;i++){var t=topOf(secs[i]);if(t>y+2){move(t);return true}}
-      if(y<max-2){move(max);return true}                               // last step: the footer
-      return true;
+      if(bottom>vh+2)return null;                  // still inside a tall section
+      for(var i=0;i<t.length;i++)if(t[i]>y+2)return t[i];
+      return y<maxY()-2?maxY():y;                    // last step: the footer
     }
-    if(y-ct>vh+2)return false;                                         // deep inside a tall section
-    if(y>ct+2){move(ct);return true}
-    var k=secs.indexOf(c);if(k>0){move(topOf(secs[k-1]));return true}
-    return false;
+    if(y-t[k]>vh+2)return null;                     // deep inside a tall section
+    if(y>t[k]+2)return t[k];
+    return k>0?t[k-1]:y;
+  }
+  function gesture(dir){
+    var from=anim?target:scrollY,d=dest(from,dir);
+    if(d===null)return false;
+    if(Math.abs(d-from)>1)glide(d);
+    return true;
   }
   addEventListener('wheel',function(e){
     if(!mq.matches||e.ctrlKey||Math.abs(e.deltaX)>Math.abs(e.deltaY))return;
-    lastWheel=performance.now();
-    if(busy){e.preventDefault();return}
-    if(Math.abs(e.deltaY)<2)return;
-    if(go(e.deltaY>0?1:-1))e.preventDefault();
+    var now=performance.now(),abs=Math.abs(e.deltaY),dir=e.deltaY>0?1:-1;
+    var fresh=now-lastT>110||abs>lastAbs*1.5+4;     // a new notch or swipe, not momentum from the last one
+    lastT=now;lastAbs=abs;
+    if(abs<1)return;
+    if(fresh){gestureSnapped=gesture(dir)}
+    if(gestureSnapped||anim)e.preventDefault();
   },{passive:false});
   addEventListener('keydown',function(e){
     if(!mq.matches||e.altKey||e.ctrlKey||e.metaKey)return;
     var t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(t.tagName)))return;
     var d=e.key==='PageDown'||(e.key===' '&&!e.shiftKey)?1:e.key==='PageUp'||(e.key===' '&&e.shiftKey)?-1:0;
-    if(!d)return;
-    if(busy){e.preventDefault();return}
-    if(go(d))e.preventDefault();
+    if(d&&gesture(d))e.preventDefault();
   });
 })();
 
